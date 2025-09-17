@@ -53,18 +53,15 @@ bot.on('message', async (msg) => {
 
 app.post('/web-data', async (req, res) => {
   const { queryId, products, totalPrice } = req.body;
-  console.log(req.body);
-  console.log('Query ID:', queryId);
+
+  const productsText = products.map((p) => `${p.title}: ${p.price}`).join('\n');
 
   try {
     await bot.answerWebAppQuery(queryId, {
       type: 'article',
       id: queryId,
       title: 'Успішна покупка',
-      input_message_content: {
-        message_text:
-          'Вітаю з покупкою, ви здійснили покупку на сумму' + totalPrice,
-      },
+      message_text: `Вітаю з покупкою на суму ${totalPrice}!\nКуплені товари:\n${productsText}`,
     });
     return res.status(200).json({});
   } catch (error) {
