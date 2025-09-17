@@ -53,8 +53,6 @@ bot.on('message', async (msg) => {
 
 app.post('/web-data', async (req, res) => {
   const { queryId, products, totalPrice } = req.body;
-  console.log(req.body);
-  console.log('Query ID:', queryId);
 
   try {
     await bot.answerWebAppQuery(queryId, {
@@ -62,8 +60,9 @@ app.post('/web-data', async (req, res) => {
       id: queryId,
       title: 'Успішна покупка',
       input_message_content: {
-        message_text:
-          'Вітаю з покупкою, ви здійснили покупку на сумму' + totalPrice,
+        message_text: `Вітаю з покупкою, ви здійснили покупку на сумму ${totalPrice} і купили такі товари: ${products.map(
+          ({ title, price }) => `${title.join(', ')}: ${price.join(', ')}`
+        )}`,
       },
     });
     return res.status(200).json({});
